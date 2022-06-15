@@ -1,0 +1,59 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    date (3.2.2)
+    eth (0.5.5)
+      keccak (~> 1.3)
+      konstructor (~> 1.0)
+      openssl (>= 2.2, < 4.0)
+      rbsecp256k1 (~> 5.1)
+      scrypt (~> 3.0)
+    etherscan_api (0.4.0)
+      faraday
+      json (~> 2.1)
+    faraday (2.3.0)
+      faraday-net_http (~> 2.0)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (2.0.3)
+    ffi (1.15.5)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
+    json (2.6.2)
+    keccak (1.3.0)
+    konstructor (1.0.2)
+    mini_portile2 (2.8.0)
+    nokogiri (1.13.6-x86_64-darwin)
+      racc (~> 1.4)
+    open-uri (0.2.0)
+      stringio
+      time
+      uri
+    openssl (3.0.0)
+    pkg-config (1.4.7)
+    racc (1.6.0)
+    rake (13.0.6)
+    rbsecp256k1 (5.1.0)
+      mini_portile2 (~> 2.7)
+      pkg-config (~> 1.4)
+      rubyzip (~> 2.3)
+    ruby2_keywords (0.0.5)
+    rubyzip (2.3.2)
+    scrypt (3.0.7)
+      ffi-compiler (>= 1.0, < 2.0)
+    stringio (3.0.2)
+    time (0.2.0)
+      date
+    uri (0.11.0)
+
+PLATFORMS
+  x86_64-darwin-21
+
+DEPENDENCIES
+  eth
+  etherscan_api
+  nokogiri
+  open-uri
+
+BUNDLED WITH
+   2.2.3
