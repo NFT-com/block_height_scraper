@@ -2,7 +2,7 @@ require "net/http"
 require "openssl"
 require "json"
 
-class EtherscanClient
+class EtherscanApiClient
 
   # DOCS: https://docs.etherscan.io/
 
