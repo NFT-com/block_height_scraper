@@ -1,1 +1,4 @@
 block_heights.csv
+/data/output/
+.DS_Store
+.idea/

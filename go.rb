@@ -3,7 +3,7 @@ require_relative 'etherscan_scraper'
 require 'securerandom'
 require 'csv'
 
-SQL_GEN_MODE          = false
+SQL_GEN_MODE          = true
 TEST_MODE             = false
 TEST_CONTRACT_ADDRESS = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d' # BAYC
 VERIFY_MODE           = false
@@ -12,7 +12,7 @@ VERIFY_SAMPLE_SIZE    = 50
 ETHERSCAN_API_CALL_BATCH_SIZE = 5
 ETHERSCAN_API_RATE_LIMIT      = 1
 
-SAMPLE_SIZE = 4000
+SAMPLE_SIZE = 20000
 
 etherscan_client = EtherscanApiClient.new(paralellism: ETHERSCAN_API_CALL_BATCH_SIZE)
 
@@ -23,21 +23,29 @@ end
 STANDARDS = { 'ERC721'  => 'f7d4c503-3a75-49c8-b72b-e18b30e14d6a',
               'ERC1155' => '4c2574d1-bd73-446b-94bb-1362f03700c0',
               'UNKNOWN' => 'f7d4c503-3a75-49c8-b72b-e18b30e14d6a',
-              nil => 'f7d4c503-3a75-49c8-b72b-e18b30e14d6a',
+              nil       => 'f7d4c503-3a75-49c8-b72b-e18b30e14d6a',
               'OpenSea' => '3f868d69-b947-4116-8104-4d984ff59756' }
+
+EXCLUDE = %w[
+  0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d
+  0x34d85c9CDeB23FA97cb08333b511ac86E1C4E258
+  0x87E738a3d5E5345d6212D8982205A564289e6324
+  0x306b1ea3ecdf94aB739F1910bbda052Ed4A9f949
+  0xbcd4f1ecff4318e7a0c791c7728f3830db506c71
+]
 
 if SQL_GEN_MODE
 
-  sql_collection_inserts          = []
+  sql_collection_inserts = []
 
   _columns = %w[network_id contract_address start_height name description symbol slug website image_url]
 
-  all_collections = CSV.read('data/output/block_heights.csv', headers: true, :encoding => 'ISO-8859-1', liberal_parsing: true).map { |row| row.to_hash }
+  all_collections       = CSV.read('data/output/block_heights.csv', headers: true, :encoding => 'ISO-8859-1', liberal_parsing: true).map { |row| row.to_hash }
   must_have_contracts   = CSV.read('data/input/must_haves.csv', headers: true, :encoding => 'ISO-8859-1', liberal_parsing: true).map { |row| row[1] }
   must_haves            = all_collections.select { |coll| must_have_contracts.include? coll['contract_address'] }
-  remaining_collections = all_collections.reject { |coll| must_have_contracts.include? coll['contract_address'] }.sample(SAMPLE_SIZE - must_haves.size)
+  remaining_collections = all_collections.reject { |coll| (EXCLUDE + must_have_contracts).include? coll['contract_address'] }.sample(SAMPLE_SIZE - must_haves.size)
 
-  collection_sample =  must_haves + remaining_collections
+  collection_sample = must_haves + remaining_collections
 
   collection_sample.each do |dirty_line|
 
